@@ -45,6 +45,9 @@
 	#define	LC_LOAD_UPWARD_DYLIB (0x23|LC_REQ_DYLD)	/* load of dylib whose initializers run later */
 #endif
 
+#ifndef CPU_SUBTYPE_ARM64_E
+	#define CPU_SUBTYPE_ARM64_E			((cpu_subtype_t) 2)
+#endif
 #ifndef CPU_SUBTYPE_ARM_V5TEJ
 	#define CPU_SUBTYPE_ARM_V5TEJ		((cpu_subtype_t) 7)
 #endif

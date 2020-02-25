@@ -62,17 +62,9 @@ namespace lto {
 // magic to place command line in crash reports
 const int crashreporterBufferSize = 2000;
 static char crashreporterBuffer[crashreporterBufferSize];
-#if __MAC_OS_X_VERSION_MIN_REQUIRED >= 1070
-	#include <CrashReporterClient.h>
-	// hack until ld does not need to build on 10.6 anymore
-    struct crashreporter_annotations_t gCRAnnotations 
-        __attribute__((section("__DATA," CRASHREPORTER_ANNOTATIONS_SECTION))) 
-        = { CRASHREPORTER_ANNOTATIONS_VERSION, 0, 0, 0, 0, 0, 0 };
-#else
-	extern "C" char* __crashreporter_info__;
-	__attribute__((used)) 
-	char* __crashreporter_info__ = crashreporterBuffer;
-#endif
+extern "C" char* __crashreporter_info__;
+__attribute__((used)) 
+char* __crashreporter_info__ = crashreporterBuffer;
 
 
 static bool			sEmitWarnings = true;
@@ -621,7 +613,7 @@ void Options::setArchitecture(cpu_type_t type, cpu_subtype_t subtype, ld::Platfo
 				if ( platforms().contains(ld::kPlatform_iOS) && (platforms().minOS(ld::kPlatform_iOS) == 0) && (fOutputKind != Options::kObjectFile) ) {
 				#if defined(DEFAULT_IPHONEOS_MIN_VERSION)
 						warning("-ios_version_min not specified, assuming " DEFAULT_IPHONEOS_MIN_VERSION);
-						setVersionMin(ld::kPlatformiOS, DEFAULT_IPHONEOS_MIN_VERSION);
+						setVersionMin(ld::kPlatform_iOS, DEFAULT_IPHONEOS_MIN_VERSION);
 				#else
 						warning("-ios_version_min not specified, assuming 6.0");
 						setVersionMin(ld::kPlatform_iOS, "6.0");
@@ -4412,7 +4404,7 @@ void Options::reconfigureDefaults()
 					if ( (fOutputKind != Options::kObjectFile) && (fOutputKind != Options::kPreload) ) {
 			#if defined(DEFAULT_IPHONEOS_MIN_VERSION)
 						warning("-ios_version_min not specified, assuming " DEFAULT_IPHONEOS_MIN_VERSION);
-						setVersionMin(ld::kPlatformiOS, DEFAULT_IPHONEOS_MIN_VERSION);
+						setVersionMin(ld::kPlatform_iOS, DEFAULT_IPHONEOS_MIN_VERSION);
 			#else
 						if ( fSubArchitecture == CPU_SUBTYPE_ARM_V7K ) {
 							warning("-watchos_version_min not specified, assuming 2.0");
@@ -5889,7 +5881,7 @@ void Options::checkForClassic(int argc, const char* argv[])
 	
 	// build command line buffer in case ld crashes
 #if __MAC_OS_X_VERSION_MIN_REQUIRED >= 1070
-	CRSetCrashLogMessage(crashreporterBuffer);
+	//CRSetCrashLogMessage(crashreporterBuffer);
 #endif
 	const char* srcRoot = getenv("SRCROOT");
 	if ( srcRoot != NULL ) {
