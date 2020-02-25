@@ -1,6 +1,5 @@
-INCLUDES = -Isrc/ -Isrc/abstraction -Isrc/ld -Isrc/ld/code-sign-blobs -Isrc/ld/parsers -Isrc/ld/parsers/libunwind -Isrc/ld/passes
+INCLUDES = -Isrc/ -Isrc/abstraction -Isrc/ld -Isrc/ld/code-sign-blobs -Isrc/ld/parsers -Isrc/ld/parsers/libunwind -Isrc/ld/passes -I$$HOME/Gardenia/include
 CXXFLAGS = -std=c++11 -stdlib=libc++ 
-SYSROOT = 
 
 all:
 	make src_other
